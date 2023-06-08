@@ -195,7 +195,7 @@ class _buy_ticket_pageState extends State<buy_ticket_page> with TickerProviderSt
                   color: Colors.transparent,
                   child: TabBarView(
                     controller: tabController,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: AlwaysScrollableScrollPhysics(),
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

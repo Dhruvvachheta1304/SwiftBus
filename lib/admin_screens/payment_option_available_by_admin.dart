@@ -136,7 +136,7 @@ class _payment_option_by_adminState extends State<payment_option_by_admin> {
                         checkColor: Colors.white,
                         activeColor: Colors.green,
                         title: Text(
-                          "Cash On Deliveri :",
+                          "Razor Pay :",
                           style: GoogleFonts.poppins(
                             fontSize: 15,
                             color: Colors.white,

@@ -20,7 +20,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../common_pages/common_theem_colour_page.dart';
+import 'AboutUs.dart';
+import 'Contact us.dart';
 import 'mybookings.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+
 
 
 class home_page extends StatefulWidget {
@@ -102,6 +107,8 @@ class _home_pageState extends State<home_page> {
   List travel_arrivedtime_list= [];
   List travel_contactno_list= [];
   List travel_vehicaleno_list= [];
+  String? img;
+  String? username;
 
   CollectionReference travel_collection = FirebaseFirestore.instance.collection("Travels");
 
@@ -200,9 +207,18 @@ class _home_pageState extends State<home_page> {
     }
     print(totseat);
   }
+  getdata() async {
+    DocumentSnapshot qs = await FirebaseFirestore.instance.collection('user data').doc(FirebaseAuth.instance.currentUser!.email.toString()).get();
+    setState(() {
+      username = qs.get('name');
+      img = qs.get('photo');
+    });
+
+  }
 
   @override
   void initState() {
+    getdata();
     travel_get_deatails();
     fun_travel_name_filtter();
     gettotseats();
@@ -282,18 +298,23 @@ class _home_pageState extends State<home_page> {
 
                           SizedBox(height: h*0.030,),
 
-                          //Hello
+                         ///DrawerImage
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Container(
-                                height: h*0.100,
-                                width: w*0.190,
+                                height: h*0.150,
+                                width: w*0.285,
                                 decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    // shape: BoxShape.circle,
-                                    borderRadius: BorderRadius.circular(100)
+                                    shape: BoxShape.circle,
+                                    // borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(color: Colors.black.withOpacity(0.2)),
+                                    color: Colors.transparent,
+                                    image:DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(img.toString()),
+                                    )
                                 ),
                               ),
                               SizedBox(width: w*0.050,),
@@ -301,14 +322,14 @@ class _home_pageState extends State<home_page> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Name", style:GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.white),),
-                                  SizedBox(height: h*0.008,),
-                                  Container(
-                                     height: h*0.04,
-                                      width: w*0.4,
-                                      child: SingleChildScrollView(
-                                          scrollDirection: Axis.vertical,
-                                          child: Text("chaudharyvijaykumar1010@gmail.com", style:GoogleFonts.poppins(fontSize: 10, fontWeight: FontWeight.w800, color: Colors.white),))),
+                                  Text(username.toString(), style:GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black87),),
+                                  // SizedBox(height: h*0.008,),
+                                  // Container(
+                                  //    height: h*0.04,
+                                  //     width: w*0.4,
+                                  //     child: SingleChildScrollView(
+                                  //         scrollDirection: Axis.vertical,
+                                  //         child: Text("", style:GoogleFonts.poppins(fontSize: 10, fontWeight: FontWeight.w800, color: Colors.white),))),
                                 ],
                               ),
                               SizedBox(width: w*0.050,),
@@ -347,7 +368,7 @@ class _home_pageState extends State<home_page> {
                         // My Booking
                         ListTile(
                           onTap: (){
-                            Get.to(mybookings());
+                            Get.to( mybookings());
                           },
                           leading: Icon(Icons.book_outlined, size: 20,color: Colors.black.withOpacity(0.5),),
                           title:Text("My Booking",style: textstyle.drawerstyle),
@@ -356,27 +377,33 @@ class _home_pageState extends State<home_page> {
 
                         //Contect Us
                         ListTile(
+                          onTap: (){
+                            Get.to( ContactUs());
+                          },
                           leading: Icon(Icons.contact_page_outlined, size: 20,color: Colors.black.withOpacity(0.5),),
                           title:Text("Contect Us", style: textstyle.drawerstyle),
                         ),
 
                         //About Us
                         ListTile(
+                          onTap: (){
+                            Get.to( AboutUs());
+                          },
                           leading: Icon(Icons.laptop_chromebook, size: 20,color: Colors.black.withOpacity(0.5),),
                           title:Text("About Us", style: textstyle.drawerstyle),
                         ),
 
-                        //Setting Us
-                        ListTile(
-                          leading: Icon(Icons.settings, size: 20,color: Colors.black.withOpacity(0.5),),
-                          title:Text("Settings", style:textstyle.drawerstyle),
-                        ),
+                        // //Setting Us
+                        // ListTile(
+                        //   leading: Icon(Icons.settings, size: 20,color: Colors.black.withOpacity(0.5),),
+                        //   title:Text("Settings", style:textstyle.drawerstyle),
+                        // ),
 
                         //Delete Acccount:
-                        ListTile(
-                          leading: Icon(Icons.delete, size: 15,color: Colors.black.withOpacity(0.5),),
-                          title:Text(" Delete Account", style: textstyle.drawerstyle),
-                        ),
+                        // ListTile(
+                        //   leading: Icon(Icons.delete, size: 15,color: Colors.black.withOpacity(0.5),),
+                        //   title:Text(" Delete Account", style: textstyle.drawerstyle),
+                        // ),
 
                         //Logout:
                         InkWell(
@@ -606,8 +633,6 @@ class _home_pageState extends State<home_page> {
 
                         GestureDetector(
                           onTap: (){
-
-
                             getselecteddata();
                           },
                           child: Container(
@@ -646,235 +671,239 @@ class _home_pageState extends State<home_page> {
                         builder: (context, snapshot) {
                           if(snapshot.connectionState==ConnectionState.waiting){
                             return Center(child: CircularProgressIndicator(),);
-                          }
-                          return ListView.separated(
-                            itemCount: indxss.isEmpty?snapshot.data!.docs.length:indxss.length,
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            physics: BouncingScrollPhysics(),
+                          }else if(snapshot.data!.docs.isEmpty){
+                            return Center(child: Text("No Buses Found"));
+                          }else{
+                            return ListView.separated(
+                              itemCount: indxss.isEmpty?snapshot.data!.docs.length:indxss.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              physics: BouncingScrollPhysics(),
 
-                            itemBuilder: (BuildContext context, int index) {
-                              return Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 10,vertical: 15),
-                                  width: w*0.8,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white,
-                                      border: Border.all(color: Colors.purple,width: 0.5)
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      //first container:
-                                      Container(
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            //TRAVELS,TIME
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-
-                                                //Mahasagar Travels full container:
-                                                Container(
-                                                  width: w*0.85,
-                                                  // color: Colors.grey,
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                                    children: [
-                                                      Container(
-                                                        width: w*0.45,
-                                                        // color: Colors.green,
-                                                        child: Text(snapshot.data!.docs[indxss.isEmpty?index:indxss[index]].get("travel_name").toString(),style: textstyle.travelstyle),),
-                                                      //ac image:
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(top: 5),
-                                                        child: Container(
-                                                            height: h*0.035,
-                                                            width: w*0.080,
-                                                            // color: Colors.black,
-                                                            child: SvgPicture.asset("assets/image/air-conditioner-svgrepo-com.svg")),
-                                                      ),
-                                                      SizedBox(width: w*0.080,),
-                                                      Text("\₹ ${snapshot.data!.docs[indxss.isEmpty?index:indxss[index]].get("price")}",style: TextStyle(fontSize: 18,color: Colors.black.withOpacity(0.8),fontWeight: FontWeight.w700),),
-
-                                                    ],
-                                                  ),
-                                                ),
-                                                SizedBox(height: 5,),
-                                                //TRAVEL TIME
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  children: [
-                                                    Text("TRAVEL TIME: ",style: TextStyle(color: Colors.grey.withOpacity(0.8),fontWeight: FontWeight.w600),),
-                                                    Text("2 hr ",style: TextStyle(color: Colors.purple.withOpacity(0.8),fontWeight: FontWeight.w600),),
-                                                  ],
-                                                ),
-                                                //TIMING
-                                                Row(
-                                                  children: [
-                                                    Icon(Icons.directions_bus,size: 15,),
-                                                    Text(snapshot.data!.docs[indxss.isEmpty?index:indxss[index]].get("depachar_time").toString(),style: TextStyle(fontSize: 15,color: Colors.black.withOpacity(0.8),fontWeight: FontWeight.w700),),
-                                                    SizedBox(width: 10,),
-                                                    Icon(Icons.directions_bus,size: 15,),
-                                                    Text(snapshot.data!.docs[indxss.isEmpty?index:indxss[index]].get("arrived_time").toString(),style: TextStyle(fontSize: 15,color: Colors.black.withOpacity(0.8),fontWeight: FontWeight.w700),),
-                                                  ],
-                                                ),
-
-                                              ],
-                                            ),
-
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-
-
-
-                                      //Second Container:
-                                      Container(
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            //DOTTED LINE
-                                            Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                  height: 15,
-                                                  width: 15,
-                                                  decoration: BoxDecoration(
-                                                      color: Color(0xffE18E42),
-                                                      shape: BoxShape.circle,
-                                                      border: Border.all(color: Color(0xffE8C29E),width: 3)
-                                                  ),
-                                                ),
-                                                DottedLine(
-                                                  dashLength: 1.0,
-                                                  lineLength: h*0.06,
-                                                  lineThickness: 2.0,
-                                                  dashGapRadius: 1.0,
-                                                  dashRadius: 2.0,
-                                                  dashColor: Colors.transparent,
-                                                  dashGapLength: 1.0,
-                                                  direction: Axis.vertical,
-                                                  dashGapGradient: [Colors.orangeAccent, Colors.blue],
-                                                ),
-
-                                                Container(
-                                                  height: 15,
-                                                  width: 15,
-                                                  decoration: BoxDecoration(
-                                                      color: Color(0xff3672D2),
-                                                      shape: BoxShape.circle,
-                                                      border: Border.all(color: Colors.white.withOpacity(0.4),width: 3)
-                                                  ),
-                                                ),
-
-                                              ],
-                                            ),
-                                            SizedBox(width: 10,),
-                                            //DESTINATION
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-
-                                              children: [
-                                                Text("From",style: TextStyle(fontSize: 12,color: Colors.black.withOpacity(0.35),fontWeight: FontWeight.w600),),
-                                                Container(
-                                                    width: w*0.45,
-                                                    // color: Colors.grey,
-                                                    child: SingleChildScrollView(
-                                                        scrollDirection: Axis.horizontal,
-                                                        child: Text(snapshot.data!.docs[indxss.isEmpty?index:indxss[index]].get("from"),style: textstyle.locationstyle,))),
-                                                SizedBox(height:h*0.015),
-                                                Text("To",style: TextStyle(fontSize: 12,color: Colors.black.withOpacity(0.35),fontWeight: FontWeight.w600),),
-                                                Container(
-                                                    width: w*0.45,
-                                                    // color: Colors.grey,
-                                                    child: SingleChildScrollView(
-                                                        scrollDirection: Axis.horizontal,
-                                                        child: Text(snapshot.data!.docs[indxss.isEmpty?index:indxss[index]].get("to"),style:textstyle.locationstyle,))),
-                                              ],
-                                            ),
-
-
-                                            Container(
-                                              padding: EdgeInsets.only(top: 20),
-                                              // color: Colors.blue,
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 10,vertical: 15),
+                                    width: w*0.8,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: Colors.white,
+                                        border: Border.all(color: Colors.purple,width: 0.5)
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        //first container:
+                                        Container(
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              //TRAVELS,TIME
+                                              Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  Column(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text("Available ", style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600),),
-                                                      Text("seat : ${totseat[indxss.isEmpty?index:indxss[index]]} ",style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600) ),
-                                                    ],
-                                                  ),
 
-                                                  SizedBox(height:h*0.010,),
+                                                  //Mahasagar Travels full container:
+                                                  Container(
+                                                    width: w*0.85,
+                                                    // color: Colors.grey,
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                      children: [
+                                                        Container(
+                                                          width: w*0.45,
+                                                          // color: Colors.green,
+                                                          child: Text(snapshot.data!.docs[indxss.isEmpty?index:indxss[index]].get("travel_name").toString(),style: textstyle.travelstyle),),
+                                                        //ac image:
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(top: 5),
+                                                          child: Container(
+                                                              height: h*0.035,
+                                                              width: w*0.080,
+                                                              // color: Colors.black,
+                                                              child: SvgPicture.asset("assets/image/air-conditioner-svgrepo-com.svg")),
+                                                        ),
+                                                        SizedBox(width: w*0.080,),
+                                                        Text("\₹ ${snapshot.data!.docs[indxss.isEmpty?index:indxss[index]].get("price")}",style: TextStyle(fontSize: 18,color: Colors.black.withOpacity(0.8),fontWeight: FontWeight.w700),),
 
-
-                                                  //buy ticket full container:
-                                                  InkWell(
-
-                                                    onTap: (){
-                                                      Get.to(buy_ticket_page(
-                                                        docid: snapshot.data!.docs[indxss.isEmpty?index:indxss[index]].id,
-                                                        docindx: indxss.isEmpty?index.toString():indxss[index].toString(),
-                                                      ));
-                                                      commonlistindx.clear();
-                                                      commonlistindx1.clear();
-                                                    },
-                                                    child: Container(
-                                                      padding: EdgeInsets.symmetric(horizontal: 5),
-                                                      height: h*0.05,
-                                                      decoration: BoxDecoration(
-                                                          gradient: theemecolor,
-                                                          borderRadius: BorderRadius.circular(12)
-                                                      ),
-                                                      child: Row(
-                                                        children: [
-                                                          Container(
-                                                            height:h*0.03,
-                                                            width: w*0.06,
-                                                            decoration: BoxDecoration(
-                                                                color: Colors.white,
-                                                                borderRadius: BorderRadius.circular(5)
-                                                            ),
-
-                                                            child: Icon(Icons.airplane_ticket,size: 18,),
-                                                          ),
-                                                          SizedBox(width: 10),
-                                                          Text("BUY TICKET",style: TextStyle(color: Colors.white),)
-                                                        ],
-                                                      ),
+                                                      ],
                                                     ),
                                                   ),
+                                                  SizedBox(height: 5,),
+                                                  //TRAVEL TIME
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: [
+                                                      Text("TRAVEL TIME: ",style: TextStyle(color: Colors.grey.withOpacity(0.8),fontWeight: FontWeight.w600),),
+                                                      Text("2 hr ",style: TextStyle(color: Colors.purple.withOpacity(0.8),fontWeight: FontWeight.w600),),
+                                                    ],
+                                                  ),
+                                                  //TIMING
+                                                  Row(
+                                                    children: [
+                                                      Icon(Icons.directions_bus,size: 15,),
+                                                      Text(snapshot.data!.docs[indxss.isEmpty?index:indxss[index]].get("depachar_time").toString(),style: TextStyle(fontSize: 15,color: Colors.black.withOpacity(0.8),fontWeight: FontWeight.w700),),
+                                                      SizedBox(width: 10,),
+                                                      Icon(Icons.directions_bus,size: 15,),
+                                                      Text(snapshot.data!.docs[indxss.isEmpty?index:indxss[index]].get("arrived_time").toString(),style: TextStyle(fontSize: 15,color: Colors.black.withOpacity(0.8),fontWeight: FontWeight.w700),),
+                                                    ],
+                                                  ),
+
                                                 ],
                                               ),
-                                            )
-                                          ],
+
+                                            ],
+                                          ),
                                         ),
-                                      ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
 
-                                    ],
-                                  )
-                              );
-                            },
 
-                            separatorBuilder: (BuildContext context, int index) {
-                              return SizedBox(height: h*0.03,);
-                            },
 
-                          );
+                                        //Second Container:
+                                        Container(
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              //DOTTED LINE
+                                              Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    height: 15,
+                                                    width: 15,
+                                                    decoration: BoxDecoration(
+                                                        color: Color(0xffE18E42),
+                                                        shape: BoxShape.circle,
+                                                        border: Border.all(color: Color(0xffE8C29E),width: 3)
+                                                    ),
+                                                  ),
+                                                  DottedLine(
+                                                    dashLength: 1.0,
+                                                    lineLength: h*0.06,
+                                                    lineThickness: 2.0,
+                                                    dashGapRadius: 1.0,
+                                                    dashRadius: 2.0,
+                                                    dashColor: Colors.transparent,
+                                                    dashGapLength: 1.0,
+                                                    direction: Axis.vertical,
+                                                    dashGapGradient: [Colors.orangeAccent, Colors.blue],
+                                                  ),
+
+                                                  Container(
+                                                    height: 15,
+                                                    width: 15,
+                                                    decoration: BoxDecoration(
+                                                        color: Color(0xff3672D2),
+                                                        shape: BoxShape.circle,
+                                                        border: Border.all(color: Colors.white.withOpacity(0.4),width: 3)
+                                                    ),
+                                                  ),
+
+                                                ],
+                                              ),
+                                              SizedBox(width: 10,),
+                                              //DESTINATION
+                                              Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+
+                                                children: [
+                                                  Text("From",style: TextStyle(fontSize: 12,color: Colors.black.withOpacity(0.35),fontWeight: FontWeight.w600),),
+                                                  Container(
+                                                      width: w*0.45,
+                                                      // color: Colors.grey,
+                                                      child: SingleChildScrollView(
+                                                          scrollDirection: Axis.horizontal,
+                                                          child: Text(snapshot.data!.docs[indxss.isEmpty?index:indxss[index]].get("from"),style: textstyle.locationstyle,))),
+                                                  SizedBox(height:h*0.015),
+                                                  Text("To",style: TextStyle(fontSize: 12,color: Colors.black.withOpacity(0.35),fontWeight: FontWeight.w600),),
+                                                  Container(
+                                                      width: w*0.45,
+                                                      // color: Colors.grey,
+                                                      child: SingleChildScrollView(
+                                                          scrollDirection: Axis.horizontal,
+                                                          child: Text(snapshot.data!.docs[indxss.isEmpty?index:indxss[index]].get("to"),style:textstyle.locationstyle,))),
+                                                ],
+                                              ),
+
+
+                                              Container(
+                                                padding: EdgeInsets.only(top: 20),
+                                                // color: Colors.blue,
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  children: [
+                                                    Column(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text("Available ", style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600),),
+                                                        Text("seat : ${totseat[indxss.isEmpty?index:indxss[index]]} ",style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600) ),
+                                                      ],
+                                                    ),
+
+                                                    SizedBox(height:h*0.010,),
+
+
+                                                    //buy ticket full container:
+                                                    InkWell(
+
+                                                      onTap: (){
+                                                        Get.to(buy_ticket_page(
+                                                          docid: snapshot.data!.docs[indxss.isEmpty?index:indxss[index]].id,
+                                                          docindx: indxss.isEmpty?index.toString():indxss[index].toString(),
+                                                        ));
+                                                        commonlistindx.clear();
+                                                        commonlistindx1.clear();
+                                                      },
+                                                      child: Container(
+                                                        padding: EdgeInsets.symmetric(horizontal: 5),
+                                                        height: h*0.05,
+                                                        decoration: BoxDecoration(
+                                                            gradient: theemecolor,
+                                                            borderRadius: BorderRadius.circular(12)
+                                                        ),
+                                                        child: Row(
+                                                          children: [
+                                                            Container(
+                                                              height:h*0.03,
+                                                              width: w*0.06,
+                                                              decoration: BoxDecoration(
+                                                                  color: Colors.white,
+                                                                  borderRadius: BorderRadius.circular(5)
+                                                              ),
+
+                                                              child: Icon(Icons.airplane_ticket,size: 18,),
+                                                            ),
+                                                            SizedBox(width: 10),
+                                                            Text("BUY TICKET",style: TextStyle(color: Colors.white),)
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+
+                                      ],
+                                    )
+                                );
+                              },
+
+                              separatorBuilder: (BuildContext context, int index) {
+                                return SizedBox(height: h*0.03,);
+                              },
+
+                            );
+                          }
+
                         },
                       )
 
@@ -884,8 +913,26 @@ class _home_pageState extends State<home_page> {
               ),
             ),
           ),
+          bottomNavigationBar: Column(
+            mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 1.0,),
+              child: Container(
+
+                height: h*0.08,
+                width:w,
+                color: Colors.white,
+                child: Image.asset("assets/image/bus banner.png"),
+              ),
+            )
+          ],
+        ),
         ),
       ),
     );
+
+
   }
 }

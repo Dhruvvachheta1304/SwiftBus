@@ -12,6 +12,9 @@ String? travname,from,to,deptime,arrtime,price;
 List<TextEditingController> namecontroller = [];
 List<TextEditingController> agecontroller1 = [];
 List tot=[];
+List ptot=[];
 List lowseat=[];
 List uppseat=[];
 List allseats=[];
+
+String? umail;

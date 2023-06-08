@@ -5,7 +5,6 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   open_document
   printing
-  share_plus
   url_launcher_windows
 )
 

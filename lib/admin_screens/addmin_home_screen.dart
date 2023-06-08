@@ -271,7 +271,7 @@ class _admin_home_pageState extends State<admin_home_page> {
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
                   children: [
-                    Icon(Icons.logout, size: 20,color: Colors.black,),
+                    Icon(Icons.logout, size: 22,color: Colors.black,),
                     Text("Logout", style: GoogleFonts.poppins(fontSize: 10, fontWeight: FontWeight.w600, color: Colors.black),)
                   ],
                 ),

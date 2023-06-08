@@ -1,41 +1,33 @@
 {
   "project_info": {
-    "project_number": "1042550794710",
-    "project_id": "busbooking-bf4b4",
-    "storage_bucket": "busbooking-bf4b4.appspot.com"
+    "project_number": "446396658011",
+    "project_id": "bus69-81c4a",
+    "storage_bucket": "bus69-81c4a.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1042550794710:android:a6c772b0b536806051dc77",
+        "mobilesdk_app_id": "1:446396658011:android:ac271a80233c4942c5aa7e",
         "android_client_info": {
           "package_name": "com.example.bluebus"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1042550794710-b11881e7kth0hhcodckc8qu10nftd5b0.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.bluebus",
-            "certificate_hash": "99785cb69906ca00fc77e1be9a6118df69171829"
-          }
-        },
-        {
-          "client_id": "1042550794710-p6ov8u040kqukthrvjk048r7ck888fuj.apps.googleusercontent.com",
+          "client_id": "446396658011-484auknhkmdj75atp02gfhnegf6guq4d.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC15rEWxvCaAxLZUUGxxHTq8KYSNKvRUeE"
+          "current_key": "AIzaSyCshE1a51b6pgc_DtsHDsO3aSNGQ9O1Wfk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1042550794710-p6ov8u040kqukthrvjk048r7ck888fuj.apps.googleusercontent.com",
+              "client_id": "446396658011-484auknhkmdj75atp02gfhnegf6guq4d.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

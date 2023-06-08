@@ -7,7 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:lottie/lottie.dart';
 class reset_passwordPage extends StatefulWidget {
   const reset_passwordPage({Key? key}) : super(key: key);
 
@@ -18,11 +18,11 @@ class reset_passwordPage extends StatefulWidget {
 class _reset_passwordPageState extends State<reset_passwordPage> {
 
   final email =TextEditingController();
-  final _fauth= FirebaseAuth.instance;
+  final _fauth = FirebaseAuth.instance;
 
   reset_password_fun() async {
     try{
-      await _fauth.sendPasswordResetEmail(email: email.text).then((value) {
+      await _fauth.sendPasswordResetEmail(email: email.text).then((value) async {
         Get.to(login_page());
       }).onError((FirebaseAuthException error, stackTrace) {
         Fluttertoast.showToast(msg: error.message.toString());
@@ -36,10 +36,13 @@ class _reset_passwordPageState extends State<reset_passwordPage> {
 
   @override
   Widget build(BuildContext context) {
+    final w = MediaQuery.of(context).size.width;
+    final h = MediaQuery.of(context).size.height;
 
     SizeConfig().init(context);
 
     return Container(
+
       height:SizeConfig.screenHeight ,
       width: SizeConfig.screenWidth,
       decoration: BoxDecoration(
@@ -63,8 +66,14 @@ class _reset_passwordPageState extends State<reset_passwordPage> {
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Container(
+                  height: h* 0.55,
+                  width:  w* 0.7,
+                  child: Lottie.asset('assets/image/forgotpwd.json'),
+                ),
+
 
                 // text
                 Container(
@@ -77,10 +86,12 @@ class _reset_passwordPageState extends State<reset_passwordPage> {
                 Container(
                   width: SizeConfig.screenWidth*0.9,
                   child: TextFormField(
+                    keyboardType: TextInputType.emailAddress,
                     cursorColor: Colors.black,
                     controller: email,
                     textAlign: TextAlign.start,
                     decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.email_outlined,color: Colors.white),
                         contentPadding: EdgeInsets.only(left: 20),
                         labelText: "Enter Email",
                         labelStyle: GoogleFonts.poppins(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w400),

@@ -40,6 +40,8 @@ class _passanger_details_pageState extends State<passanger_details_page> {
 
     print(widget.docindx.toString());
     namecontroller.clear();
+    // passmail.clear();
+    // passcont.clear();
     agecontroller1.clear();
     lowseat.clear();
     uppseat.clear();
